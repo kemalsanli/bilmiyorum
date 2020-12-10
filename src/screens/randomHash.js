@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import CryptoJS from 'crypto-js'
 import React, {useState, useEffect} from 'react';
 import {Text, StyleSheet,View,FlatList, TouchableOpacity, Alert, Clipboard} from 'react-native';
 import Constants from 'expo-constants';
+import CryptoJS from 'crypto-js'
+import { keccak224, keccak256, keccak384, keccak512, sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256 } from 'js-sha3';
 
 console.log("ProofofConcept.");
 // https://docs.expo.io/versions/v39.0.0/sdk/brightness/
@@ -24,7 +25,7 @@ const device = [Constants.appOwnership,Constants.debugMode, Constants.deviceName
 
 const randomHash=() => {
     var sayac = 0
-    const [kelime, setKelime] = useState("");
+    const [kelime, setKelime] = useState("04279ffb99c19c5768536d46b9f1143a1412b75d46024f88554a83c0e05613f20beab7589173d584aebfa73fb3512376689c2cbb8ecd0067677f43e0f5bfd2ce");
     const rhashFunc = () => {
     
          while ( sayac < Math.floor(Math.random() * 9999) + 500) {
@@ -41,40 +42,75 @@ const randomHash=() => {
     
     const DATA = [
         {
-          hash: CryptoJS.SHA3(kelime).toString(CryptoJS.enc.Hex),
-          title: "SHA3 ",
+          hash: sha3_512(kelime),
+          title: "SHA3 512 ",
         },
         {
-            hash: CryptoJS.SHA512(kelime).toString(CryptoJS.enc.Hex),
-            title: "SHA512",
-        },
-        
-        {
-          hash: CryptoJS.SHA384(kelime).toString(CryptoJS.enc.Hex),
-          title: "SHA384 ",
+          hash: sha3_384(kelime),
+          title: "SHA3 384 ",
         },
         {
-          hash: CryptoJS.SHA256(kelime).toString(CryptoJS.enc.Hex),
-          title: "SHA256 ",
+          hash: sha3_256(kelime),
+          title: "SHA3 256 ",
         },
         {
-            hash: CryptoJS.SHA224(kelime).toString(CryptoJS.enc.Hex),
-            title: "SHA224 ",
+          hash: sha3_224(kelime),
+          title: "SHA3 224 ",
         },
         {
-            hash: CryptoJS.SHA1(kelime).toString(CryptoJS.enc.Hex),
-            title: "SHA1 ",
+          hash: keccak512(kelime),
+          title: "KECCAK512 ",
         },
         {
-            hash: CryptoJS.MD5(kelime).toString(CryptoJS.enc.Hex),
-            title: "MD5 ",
+          hash: keccak384(kelime),
+          title: "KECCAK384 ",
         },
         {
-            hash: CryptoJS.RIPEMD160(kelime).toString(CryptoJS.enc.Hex),
-            title: "RIPEMD160 ",
+          hash: keccak256(kelime),
+          title: "KECCAK256 ",
         },
-        
-      ];
+        {
+          hash: keccak224(kelime),
+          title: "KECCAK224 ",
+        },
+        {
+          hash: shake256(kelime,512),
+          title: "SHAKE256/512 ",
+        },
+        {
+          hash: shake128(kelime,256),
+          title: "SHAKE128/256 ",
+        },
+        {
+          hash: CryptoJS.SHA512(kelime).toString(CryptoJS.enc.Hex),
+          title: "SHA512",
+        },
+      
+        {
+        hash: CryptoJS.SHA384(kelime).toString(CryptoJS.enc.Hex),
+        title: "SHA384 ",
+        },
+        {
+        hash: CryptoJS.SHA256(kelime).toString(CryptoJS.enc.Hex),
+        title: "SHA256 ",
+        },
+       {
+          hash: CryptoJS.SHA224(kelime).toString(CryptoJS.enc.Hex),
+          title: "SHA224 ",
+       },
+       {
+        hash: CryptoJS.SHA1(kelime).toString(CryptoJS.enc.Hex),
+        title: "SHA1 ",
+       },
+       {
+        hash: CryptoJS.MD5(kelime).toString(CryptoJS.enc.Hex),
+        title: "MD5 ",
+       },
+       {
+        hash: CryptoJS.RIPEMD160(kelime).toString(CryptoJS.enc.Hex),
+        title: "RIPEMD160 ",
+        }
+       ];
       const copyToClipboard = (Text) => {
         sayac = 0
         rhashFunc()

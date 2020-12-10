@@ -1,18 +1,54 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet,View, TouchableOpacity, Platform, Image} from 'react-native';
+import {Text, StyleSheet,View, TouchableOpacity, Platform, Image,Clipboard} from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
+import { sha3_512 } from 'js-sha3';
+import Constants from 'expo-constants';
+import * as Cellular from 'expo-cellular';
+
+const hamDegerler = ["_______DeviceInfoStarts________",
+  "appOwnership: " + Constants.appOwnership,
+  "debugMode : " + Constants.debugMode,
+  "deviceName: " + Constants.deviceName ,
+  "deviceYearClass: " + Constants.deviceYearClass ,
+  "experienceUrl: " + Constants.experienceUrl,
+  "expoRuntimeVersion " + Constants.expoRuntimeVersion,
+  "expoVersion: " +  Constants.expoVersion, 
+  "installationId: " +  Constants.installationId,
+  "intentUri: " +  Constants.intentUri,
+  "isDetached: " +  Constants.isDetached,
+  "isDevice: " + Constants.isDevice,
+  "isHeadless: " + Constants.isHeadless,
+  "linkingUri: " + Constants.linkingUri,
+  "linkingUrl: " + Constants.linkingUrl,
+  "name: " +  Constants.name,
+  "nativeAppVersion: " +  Constants.nativeAppVersion,
+  "nativeBuildVersion: " +  Constants.nativeBuildVersion,
+  "sessionId: " +  Constants.sessionId, 
+  "systemVersion: " +  Constants.systemVersion,
+  "allowsVoip: " + Cellular.allowsVoip,
+  "carrier: " + Cellular.carrier,
+  "mobileCountryCode: " + Cellular.mobileCountryCode,
+  "mobileNetworkCode: " + Cellular.mobileNetworkCode,
+  "_____DeviceInfoEnds_____"
+]
+
+  console.log(hamDegerler);
+
 
 const mainPage=({navigation}) => {
     const [image, setImage] = useState(null);
+    const[copyState,setCopyState] = useState(null);
+    
     useEffect(() => {
         (async () => {
           if (Platform.OS !== 'web') {
             const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
             if (status !== 'granted') {
-              alert('Sorry, we need camera roll permissions to make this work!');
+              alert('izninizle çalışabilir miyim ?');
             }
           }
         })();
@@ -34,12 +70,55 @@ const mainPage=({navigation}) => {
     
     return <View style={styles.picker}>
 
-   
+{image &&  
+      <LinearGradient start={[0, 0.5]}
+                     end={[1, 0.5]}
+                     colors={['#EFBB35', '#4AAE9B']}
+                     style={{borderRadius: 5}}>
+          <View style={{margin: 10, borderRadius: 1}}>
+           <TouchableOpacity onPress={
+             ()=>{
+                Clipboard.setString(sha3_512(image));
+                setCopyState("1");
+             }
+             }>
+            <View style={{alignItems: "center"}}>
+              <Image source={{ uri: image }} 
+                style={{
+                margin: 5,
+                paddingHorizontal: 6, 
+                width: 200, 
+                height: 200, 
+               }}
+              />
+          
+            </View>
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+}
+         
+      <TouchableOpacity onPress={
+          ()=>{
+            pickImage();
+            setCopyState(null);
+          }
         
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius:10, borderWidth:4, borderColor:"black" }} />}
-        <TouchableOpacity onPress={pickImage} style={styles.buttonContainer} >
-            <Text style={styles.buttonText}>Resim Seç</Text>
-        </TouchableOpacity>
+        } style={{paddingVertical:10, paddingHorizontal:12, elevation:8, marginTop:10}}>
+        <LinearGradient start={[0, 0.5]}
+                  end={[1, 0.5]}
+                  colors={['#EFBB35', '#4AAE9B']}
+                  style={{borderRadius: 5}}>
+                   <View style={styles.circleGradient}>
+                     
+                   {image ? <Text style={styles.visit}>Başka Görsel Seç</Text>:<Text style={styles.visit}>Görsel Seç</Text>}
+              </View>
+            </LinearGradient>
+            
+      </TouchableOpacity>
+
+      {copyState && <Text>Görselin SHA3 512 Hash'i başarıyla kopyalandı.</Text>} 
+        
        
         <StatusBar style="auto"/>
 
@@ -51,8 +130,8 @@ const mainPage=({navigation}) => {
 
 mainPage.navigationOptions = ({navigation}) => {
     return {
-        headerRight: () => <TouchableOpacity onPress={()=> navigation.navigate('RandomHash')}><FontAwesome5 name="random" size={30} color="black" style={styles.headerButtons}/></TouchableOpacity>,
-        headerLeft: ()=> <TouchableOpacity onPress={()=> navigation.navigate('TextToHash')}><MaterialCommunityIcons name="format-text" size={30} color="black" style={styles.headerButtons}/></TouchableOpacity>
+        headerRight: () => <TouchableOpacity onPress={()=> navigation.navigate('RandomHash')}><FontAwesome5 name="random" size={30} color="black" style={{marginRight:10}}/></TouchableOpacity>,
+        headerLeft: ()=> <TouchableOpacity onPress={()=> navigation.navigate('TextToHash')}><MaterialCommunityIcons name="format-text" size={30} color="black" style={{marginLeft:10}}/></TouchableOpacity>
     };
 };
 
@@ -61,11 +140,7 @@ mainPage.navigationOptions = ({navigation}) => {
   
 
 const styles = StyleSheet.create({
-    headerButtons:{
-        marginLeft:10,
-        marginRight:10
 
-    },
     picker:{ 
         flex:1,
         alignItems: "center",
@@ -81,7 +156,26 @@ const styles = StyleSheet.create({
         color: 'black',
         padding: 15,
         width: 200
-    }
+    },
+    hashText: {
+      textAlign: 'center',
+      color: 'black',
+      padding: 15,
+      width: 200
+  },
+  circleGradient: {
+    margin: 1,
+    backgroundColor: "white",
+    borderRadius: 5
+  },
+  visit: {
+    margin: 5,
+    paddingHorizontal: 13,
+    textAlign: "center",
+    backgroundColor: "white",
+    color: '#008f68',
+    fontSize: 18
+  }
 });
 
 
