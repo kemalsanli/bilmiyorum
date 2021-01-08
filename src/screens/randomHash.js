@@ -36,7 +36,7 @@ const device = [
 const hamDegerler = [
   Constants.appOwnership,
   Constants.debugMode,
-  Constants.deviceName ,
+  Constants.deviceName,
   Constants.deviceYearClass,
   Constants.experienceUrl,
   Constants.expoRuntimeVersion,

@@ -160,16 +160,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveScreenWidth(3.5),
   },
   imageStyle: {
-    paddingHorizontal: responsiveScreenWidth(2),
-    margin: responsiveScreenWidth(1.5),
     width: responsiveScreenWidth(55),
     height: responsiveScreenWidth(55),
+    margin: responsiveScreenWidth(1.5),
+    paddingHorizontal: responsiveScreenWidth(2),
   },
   buttonStyle: {
+    elevation:8,
+    marginTop: responsiveScreenWidth(2),
     paddingVertical: responsiveScreenWidth(2),
     paddingHorizontal: responsiveScreenWidth(2.5),
-    marginTop: responsiveScreenWidth(2),
-    elevation:8,
   }
 });
 
