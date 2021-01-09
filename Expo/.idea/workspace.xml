@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c66257d6-94e6-4c32-abdc-62c23c963bd7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.expo/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/mainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/mainPage.js" afterDir="false" />
@@ -38,7 +39,7 @@
       <option name="presentableId" value="Default" />
       <updated>1610203711267</updated>
       <workItem from="1610203712716" duration="7975000" />
-      <workItem from="1610216414473" duration="4117000" />
+      <workItem from="1610216414473" duration="5429000" />
     </task>
     <servers />
   </component>

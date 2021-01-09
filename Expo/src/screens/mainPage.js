@@ -11,7 +11,7 @@ import * as Cellular from 'expo-cellular';
 import * as Sharing from 'expo-sharing';
 import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 import * as FileSystem from 'expo-file-system';
-import CameraRoll, {saveToCameraRoll} from "@react-native-community/cameraroll";
+import * as MediaLibrary from 'expo-media-library';
 
 const hamDegerler = [
   "_______DeviceInfoStarts________",
@@ -99,10 +99,19 @@ const mainPage=({navigation}) => {
           console.log(img);
           const fileReaderInstance = new FileReader();
           fileReaderInstance.readAsDataURL(blob);
-          fileReaderInstance.onload = () => {
+          fileReaderInstance.onload = async () => {
             let base64data = fileReaderInstance.result;
             setImage(base64data);
             console.log(base64data);
+            const data = base64data;
+            const base64Code = data.split("data:image/png;base64,")[1];
+            const filename = FileSystem.documentDirectory + "some_unique_file_name.png";
+            await FileSystem.writeAsStringAsync(filename, base64Code, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+
+            const mediaResult = await MediaLibrary.saveToLibraryAsync(filename);
+            console.log("geldi");
           }
 
 
