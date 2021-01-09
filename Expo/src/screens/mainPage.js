@@ -57,17 +57,34 @@ const mainPage=({navigation}) => {
   }, []);
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    let result = await ImagePicker.launchImageLibraryAsync();
     console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
     }
+  };
+  const xorApiD = async () => {
+    const sayi=new FormData();
+    let filename = image.split('/').pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    sayi.append('image', { uri: image, name: filename, type });
+    sayi.append('hash',"4f54e67cb598e8219158647e6340af13ab3b07b48f2501226d2f516f0be11058");
+
+
+    await fetch('http://127.0.0.1:8000/api/', {
+      method: 'POST',
+      body: sayi,
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    }).then(res=>{return res.blob()})
+        .then(blob=>{
+          var img = URL.createObjectURL(blob);
+          // Do whatever with the img
+          setImage(img);
+        })
   };
 
   return <View style={styles.picker}>
@@ -83,6 +100,7 @@ const mainPage=({navigation}) => {
             onPress={() => {
                 Clipboard.setString(sha3_512(image));
                 setCopyState("1");
+                xorApiD();
             }}
           >
             <View style={{alignItems: "center"}}>
