@@ -41,8 +41,8 @@ const mainPage=({navigation}) => {
   return <View style={styles.picker}>
     {image &&
       <LinearGradient
-        start={[0, 0.5]}
-        end={[1, 0.5]}
+        start={{x:0, y:0.5}}
+        end={{x:1, y:0.5}}
         colors={['#EFBB35', '#4AAE9B']}
         style={{borderRadius: 5}}
       >
@@ -70,8 +70,8 @@ const mainPage=({navigation}) => {
       }}
       style={styles.buttonStyle}
     >
-      <LinearGradient start={[0, 0.5]}
-        end={[1, 0.5]}
+      <LinearGradient start={{x:0, y:0.5}}
+        end={{x:1, y:0.5}}
         colors={['#EFBB35', '#4AAE9B']}
         style={{borderRadius: 5}}
       >
