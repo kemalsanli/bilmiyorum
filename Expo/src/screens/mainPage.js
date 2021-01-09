@@ -8,7 +8,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { sha3_512 } from 'js-sha3';
 import Constants from 'expo-constants';
 import * as Cellular from 'expo-cellular';
-import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions'
+import * as Sharing from 'expo-sharing';
+import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
+import * as FileSystem from 'expo-file-system';
+import CameraRoll, {saveToCameraRoll} from "@react-native-community/cameraroll";
 
 const hamDegerler = [
   "_______DeviceInfoStarts________",
@@ -64,6 +67,7 @@ const mainPage=({navigation}) => {
       setImage(result.uri);
     }
   };
+
   const xorApiD = async () => {
     const sayi=new FormData();
     let filename = image.split('/').pop();
@@ -82,8 +86,28 @@ const mainPage=({navigation}) => {
     }).then(res=>{return res.blob()})
         .then(blob=>{
           var img = URL.createObjectURL(blob);
+
           // Do whatever with the img
-          setImage(img);
+          //setImage(img);
+          var reader = new FileReader();
+          reader.readAsDataURL(img);
+          reader.onloadend = function() {
+            var base64data = reader.result;
+            console.log(base64data);
+          }
+          //FileSystem.downloadAsync('',img,'image/png')
+          console.log(img);
+          const fileReaderInstance = new FileReader();
+          fileReaderInstance.readAsDataURL(blob);
+          fileReaderInstance.onload = () => {
+            let base64data = fileReaderInstance.result;
+            setImage(base64data);
+            console.log(base64data);
+          }
+
+
+
+
         })
   };
 

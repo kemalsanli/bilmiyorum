@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/cameraroll": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
@@ -19,6 +20,7 @@
     "expo-image-picker": "~9.1.1",
     "expo-linear-gradient": "~8.3.0",
     "expo-sensors": "~9.1.0",
+    "expo-sharing": "~8.4.1",
     "expo-status-bar": "~1.0.2",
     "install": "^0.13.0",
     "js-sha3": "^0.8.0",
