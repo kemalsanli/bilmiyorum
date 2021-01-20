@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, StatusBar} from 'react-native'
+import {View, Text, StatusBar} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
@@ -14,21 +14,27 @@ import textToHash from './src/screens/textToHash'
 const Stack = createStackNavigator()
 
 class App extends React.Component {
+  componentDidMount() {
+    Promise.all([
+      this.getInitialScreen(),
+    ]).then(() => {
+      this.setState({
+        flow: true,
+      })
+    })
+  }
 
   state = {
-    navigationStateFlow: false,
-    navigationState: null,
+    flow: false,
+    initialRouteName: null,
   }
 
   render() {
-    return <SafeAreaProvider>
+    return (!this.state.flow) ? <View/> : <SafeAreaProvider>
       <StatusBar barStyle={'light-content'} />
-      <NavigationContainer
-        initialState={this.state.navigationState}
-        onStateChange={this.onNavigationStateChange}
-      >
+      <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={'IntroScreen'}
+          initialRouteName={this.state.initialRouteName}
           screenOptions={{
             animationEnabled: false,
             headerShown: false,
@@ -71,26 +77,10 @@ class App extends React.Component {
     </SafeAreaProvider>
   }
 
-
-  navigationStateFlow = async () => {
-    if(__DEV__) {
-      await this.initNavigationState()
-    }
+  getInitialScreen = async () => {
     this.setState({
-      navigationStateFlow: true,
+      initialRouteName: await AsyncStorage.getItem('Intro') == null ? 'IntroScreen' : 'mainPage'
     })
-  }
-
-  initNavigationState = async () => {
-    let navigationState = await AsyncStorage.getItem('NAVIGATION_STATE')
-    navigationState = JSON.parse(navigationState)
-    this.setState({
-      navigationState,
-    })
-  }
-
-  onNavigationStateChange = ( navigationState ) => {
-    AsyncStorage.setItem('NAVIGATION_STATE', JSON.stringify(navigationState))
   }
 }
 

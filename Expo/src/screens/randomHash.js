@@ -5,6 +5,8 @@ import Constants from 'expo-constants';
 import CryptoJS from 'crypto-js'
 import { keccak224, keccak256, keccak384, keccak512, sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256 } from 'js-sha3';
 import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions'
+import { AntDesign } from '@expo/vector-icons';
+import HeaderComponent from '../components/HeaderComponent'
 
 console.log("ProofofConcept.");
 // https://docs.expo.io/versions/v39.0.0/sdk/brightness/
@@ -60,7 +62,7 @@ const hamDegerler = [
   Constants.systemVersion
 ]
 
-const randomHash=() => {
+const randomHash=({navigation}) => {
   var sayac = 0
   const [kelime, setKelime] = useState("04279ffb99c19c5768536d46b9f1143a1412b75d46024f88554a83c0e05613f20beab7589173d584aebfa73fb3512376689c2cbb8ecd0067677f43e0f5bfd2ce");
 
@@ -155,22 +157,37 @@ const randomHash=() => {
     rhashFunc();
   },[])
 
-  return <View style={{flex:1}}>
-    <StatusBar style="auto"/>
-    <FlatList
-      style={{width: '100%'}}
-      data={DATA}
-      renderItem={({ item }) => (
-        <View style={styles.row}>
-          <TouchableOpacity onPress={() => copyToClipboard(item.hash)}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.hash}>{item.hash}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      keyExtractor={item => item.title}
+  return <>
+    <HeaderComponent
+      title={'Random Hash'}
+      leftComponent={
+        <TouchableOpacity onPress={()=> navigation.navigate('mainPage')}>
+          <AntDesign
+            name="arrowleft"
+            size={30}
+            color="black"
+            style={{marginLeft: responsiveScreenWidth(2.7)}}
+          />
+        </TouchableOpacity>
+      }
     />
-  </View>
+    <View style={{flex:1}}>
+      <StatusBar style="auto"/>
+      <FlatList
+        style={{width: '100%'}}
+        data={DATA}
+        renderItem={({ item }) => (
+          <View style={styles.row}>
+            <TouchableOpacity onPress={() => copyToClipboard(item.hash)}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.hash}>{item.hash}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={item => item.title}
+      />
+    </View>
+  </>
 };
 
 const styles = StyleSheet.create({

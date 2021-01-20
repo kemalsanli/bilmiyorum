@@ -12,6 +12,7 @@ import * as Sharing from 'expo-sharing';
 import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
+import HeaderComponent from '../components/HeaderComponent'
 
 const hamDegerler = [
   "_______DeviceInfoStarts________",
@@ -113,14 +114,34 @@ const mainPage=({navigation}) => {
             const mediaResult = await MediaLibrary.saveToLibraryAsync(filename);
             console.log("geldi");
           }
-
-
-
-
         })
   };
 
-  return <View style={styles.picker}>
+  return <>
+    <HeaderComponent
+      title={'Bilmiyorum'}
+      leftComponent={
+        <TouchableOpacity onPress={()=> navigation.navigate('textToHash')}>
+          <MaterialCommunityIcons
+            name="format-text"
+            size={30}
+            color="black"
+            style={{marginLeft: responsiveScreenWidth(2.7)}}
+          />
+        </TouchableOpacity>
+      }
+      rightComponent={
+        <TouchableOpacity onPress={()=> navigation.navigate('randomHash')}>
+          <FontAwesome5
+            name="random"
+            size={30}
+            color="black"
+            style={{marginRight: responsiveScreenWidth(2.7)}}
+          />
+        </TouchableOpacity>
+      }
+    />
+    <View style={styles.picker}>
     {image &&
       <LinearGradient
         start={[0, 0.5]}
@@ -166,29 +187,7 @@ const mainPage=({navigation}) => {
     {copyState && <Text>Görselin SHA3 512 Hash'i başarıyla kopyalandı.</Text>}
     <StatusBar style="auto"/>
   </View>
-};
-
-mainPage.navigationOptions = ({navigation}) => {
-  return {
-    headerRight: () =>
-      <TouchableOpacity onPress={()=> navigation.navigate('RandomHash')}>
-        <FontAwesome5
-          name="random"
-          size={30}
-          color="black"
-          style={{marginRight: responsiveScreenWidth(2.7)}}
-        />
-      </TouchableOpacity>,
-    headerLeft: () =>
-      <TouchableOpacity onPress={()=> navigation.navigate('TextToHash')}>
-        <MaterialCommunityIcons
-          name="format-text"
-          size={30}
-          color="black"
-          style={{marginLeft: responsiveScreenWidth(2.7)}}
-        />
-      </TouchableOpacity>
-  };
+  </>
 };
 
 const styles = StyleSheet.create({
