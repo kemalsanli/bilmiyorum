@@ -10,9 +10,7 @@ function ListItemChevron({ containerStyle, ...props }) {
       type={Platform.OS === 'ios' ? 'ionicon' : 'material'}
       color="#D1D1D6"
       name={
-        Platform.OS === 'ios'
-          ? 'chevron-forward-outline'
-          : 'keyboard-arrow-right'
+        Platform.OS === 'ios' ? 'ios-arrow-forward' : 'keyboard-arrow-right'
       }
       size={16}
       containerStyle={StyleSheet.flatten([
