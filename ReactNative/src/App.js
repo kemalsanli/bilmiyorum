@@ -1,53 +1,86 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element'
+import React from 'react'
+import {View, Text, StatusBar} from 'react-native'
+import {NavigationContainer} from '@react-navigation/native'
+import {createStackNavigator} from '@react-navigation/stack'
+import {SafeAreaProvider} from 'react-native-safe-area-context'
+import AsyncStorage from '@react-native-community/async-storage'
 
+import IntroScreen from './screens/IntroScreen'
 import mainPage from './screens/mainPage'
 import randomHash from './screens/randomHash'
 import results from './screens/results'
 import textToHash from './screens/textToHash'
 
-const Stack = createSharedElementStackNavigator();
+const Stack = createStackNavigator()
 
 class App extends React.Component {
+  componentDidMount() {
+    Promise.all([
+      this.getInitialScreen(),
+    ]).then(() => {
+      this.setState({
+        flow: true,
+      })
+    })
+  }
+
+  state = {
+    flow: false,
+    initialRouteName: null,
+  }
 
   render() {
-    return (
+    return (!this.state.flow) ? <View/> : <SafeAreaProvider>
+      <StatusBar barStyle={'light-content'} />
       <NavigationContainer>
         <Stack.Navigator
-          initialRuteName= "mainPage">
+          initialRouteName={this.state.initialRouteName}
+          screenOptions={{
+            animationEnabled: false,
+            headerShown: false,
+          }}
+          drawerType={'back'}
+        >
           <Stack.Screen
-            name="mainPage"
+            name={'IntroScreen'}
+            component={IntroScreen}
+            options={{
+            }}
+          />
+          <Stack.Screen
+            name={'mainPage'}
             component={mainPage}
             options={{
-              header: () => null,
             }}
           />
           <Stack.Screen
-            name="randomHash"
+            name={'randomHash'}
             component={randomHash}
-            options={navigation => ({
-              header: () => null,
-              headerBackTitleVisible: false,
-            })}
+            options={{
+            }}
           />
           <Stack.Screen
-            name="results"
+            name={'results'}
             component={results}
             options={{
-              header: () => null,
             }}
           />
           <Stack.Screen
-            name="textToHash"
+            name={'textToHash'}
             component={textToHash}
             options={{
-              header: () => null,
             }}
           />
+
         </Stack.Navigator>
       </NavigationContainer>
-    )
+    </SafeAreaProvider>
+  }
+
+  getInitialScreen = async () => {
+    this.setState({
+      initialRouteName: await AsyncStorage.getItem('Intro') == null ? 'IntroScreen' : 'mainPage'
+    })
   }
 }
 

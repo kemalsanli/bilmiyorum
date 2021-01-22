@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet,View,FlatList, TouchableOpacity, Alert, Clipboard } from 'react-native';
-import { SearchBar } from 'react-native-elements';
-import 'js-sha3'
-import CryptoJS from 'crypto-js'
-import { keccak224, keccak256, keccak384, keccak512, sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256 } from 'js-sha3';
-import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions'
+
+import React, {useState} from 'react';
+import {Text, StyleSheet,View,FlatList, TouchableOpacity, Alert, Clipboard} from 'react-native';
+import {SearchBar} from 'react-native-elements';
+import {responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize} from 'react-native-responsive-dimensions'
 import HeaderComponent from '../components/HeaderComponent'
 
-console.log("demedi deme");
+import {keccak224, keccak256, keccak384, keccak512, sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256} from 'js-sha3';
+import CryptoJS from 'crypto-js'
+import 'js-sha3'
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
-const textToHash=() => {
+const textToHash=({navigation}) => {
 
   const [kelime, setKelime] = useState("");
 
@@ -90,32 +92,47 @@ const textToHash=() => {
     //Alert.alert('Bilgilendirme','Hash Kopyalandı.',[{text: 'Kapat'}]);
   };
 
-  return <View style={{flex:1}}>
-    <SearchBar
-      placeholder="Karakter giriniz."
-      value={kelime}
-      lightTheme
-      onChangeText={newSearch => setKelime(newSearch)}
-      autoCapitalize = 'none'
-      borderBottomColor = 'white'
-      containerStyle={{ backgroundColor: 'white'  }}
-      inputStyle={{ color:'black'}}
-      searchIcon = {null}
+  return <>
+    <HeaderComponent
+      title={'Text To Hash'}
+      rightComponent={
+        <TouchableOpacity onPress={()=> navigation.navigate('mainPage')}>
+          <AntDesign
+            name="arrowright"
+            size={30}
+            color="black"
+            style={{marginLeft: responsiveScreenWidth(2.7)}}
+          />
+        </TouchableOpacity>
+      }
     />
-    <FlatList
-      style={{width: '100%'}}
-      data={DATA}
-      renderItem={({ item }) => (
-        <View style={styles.row} >
-          <TouchableOpacity onPress={() => copyToClipboard(item.hash)}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.hash}>{item.hash}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      keyExtractor={item => item.title}
-    />
+    <View style={{flex:1}}>
+      <SearchBar
+        placeholder="Karakter giriniz."
+        value={kelime}
+        lightTheme
+        onChangeText={newSearch => setKelime(newSearch)}
+        autoCapitalize = 'none'
+        borderBottomColor = 'white'
+        containerStyle={{ backgroundColor: 'white'  }}
+        inputStyle={{ color:'black'}}
+        searchIcon = {null}
+      />
+      <FlatList
+        style={{width: '100%'}}
+        data={DATA}
+        renderItem={({ item }) => (
+          <View style={styles.row} >
+            <TouchableOpacity onPress={() => copyToClipboard(item.hash)}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.hash}>{item.hash}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={item => item.title}
+      />
   </View>
+  </>
 };
 
 const styles = StyleSheet.create({

@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, Platform, Image, Clipboard } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import ImagePicker from 'react-native-image-picker'
-import LinearGradient from 'react-native-linear-gradient'
-import { sha3_512 } from 'js-sha3';
-import { responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize } from 'react-native-responsive-dimensions'
+import React, {useEffect, useState} from 'react';
+import {Text, StyleSheet, View, TouchableOpacity, Platform, Image, Clipboard} from 'react-native';
+import {responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 import HeaderComponent from '../components/HeaderComponent'
+
+import { sha3_512 } from 'js-sha3';
+import {LinearGradient} from 'expo-linear-gradient';
+import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const mainPage=({navigation}) => {
 
@@ -16,7 +20,7 @@ const mainPage=({navigation}) => {
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('izninizle çalışabilir miyim ?');
         }
@@ -25,12 +29,7 @@ const mainPage=({navigation}) => {
   }, []);
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    let result = await ImagePicker.launchImageLibraryAsync();
     console.log(result);
 
     if (!result.cancelled) {
@@ -38,7 +37,79 @@ const mainPage=({navigation}) => {
     }
   };
 
-  return <View style={styles.picker}>
+  const xorApiD = async () => {
+    const sayi=new FormData();
+    let filename = image.split('/').pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    sayi.append('image', { uri: image, name: filename, type });
+    sayi.append('hash',"4f54e67cb598e8219158647e6340af13ab3b07b48f2501226d2f516f0be11058");
+
+
+    await fetch('http://127.0.0.1:8000/api/', {
+      method: 'POST',
+      body: sayi,
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    }).then(res=>{return res.blob()})
+        .then(blob=>{
+          var img = URL.createObjectURL(blob);
+
+          // Do whatever with the img
+          //setImage(img);
+          var reader = new FileReader();
+          reader.readAsDataURL(img);
+          reader.onloadend = function() {
+            var base64data = reader.result;
+            console.log(base64data);
+          }
+          //FileSystem.downloadAsync('',img,'image/png')
+          console.log(img);
+          const fileReaderInstance = new FileReader();
+          fileReaderInstance.readAsDataURL(blob);
+          fileReaderInstance.onload = async () => {
+            let base64data = fileReaderInstance.result;
+            setImage(base64data);
+            console.log(base64data);
+            const data = base64data;
+            const base64Code = data.split("data:image/png;base64,")[1];
+            const filename = FileSystem.documentDirectory + "some_unique_file_name.png";
+            await FileSystem.writeAsStringAsync(filename, base64Code, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+
+            const mediaResult = await MediaLibrary.saveToLibraryAsync(filename);
+            console.log("geldi");
+          }
+        })
+  };
+
+  return <>
+    <HeaderComponent
+      title={'Bilmiyorum'}
+      leftComponent={
+        <TouchableOpacity onPress={()=> navigation.navigate('textToHash')}>
+          <MaterialCommunityIcons
+            name="format-text"
+            size={30}
+            color="black"
+            style={{marginLeft: responsiveScreenWidth(2.7)}}
+          />
+        </TouchableOpacity>
+      }
+      rightComponent={
+        <TouchableOpacity onPress={()=> navigation.navigate('randomHash')}>
+          <FontAwesome5
+            name="random"
+            size={30}
+            color="black"
+            style={{marginRight: responsiveScreenWidth(2.7)}}
+          />
+        </TouchableOpacity>
+      }
+    />
+    <View style={styles.picker}>
     {image &&
       <LinearGradient
         start={{x:0, y:0.5}}
@@ -51,6 +122,7 @@ const mainPage=({navigation}) => {
             onPress={() => {
                 Clipboard.setString(sha3_512(image));
                 setCopyState("1");
+                xorApiD();
             }}
           >
             <View style={{alignItems: "center"}}>
@@ -82,29 +154,7 @@ const mainPage=({navigation}) => {
     </TouchableOpacity>
     {copyState && <Text>Görselin SHA3 512 Hash'i başarıyla kopyalandı.</Text>}
   </View>
-};
-
-mainPage.navigationOptions = ({navigation}) => {
-  return {
-    headerRight: () =>
-      <TouchableOpacity onPress={()=> navigation.navigate('RandomHash')}>
-        <FontAwesome5
-          name="random"
-          size={30}
-          color="black"
-          style={{marginRight: responsiveScreenWidth(2.7)}}
-        />
-      </TouchableOpacity>,
-    headerLeft: () =>
-      <TouchableOpacity onPress={()=> navigation.navigate('TextToHash')}>
-        <MaterialCommunityIcons
-          name="format-text"
-          size={30}
-          color="black"
-          style={{marginLeft: responsiveScreenWidth(2.7)}}
-        />
-      </TouchableOpacity>
-  };
+  </>
 };
 
 const styles = StyleSheet.create({

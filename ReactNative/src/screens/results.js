@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet, Button, View, FlatList } from 'react-native'
-import HeaderComponent from '../components/HeaderComponent'
+import React from 'react';
+import {Text, StyleSheet, Button, View, FlatList} from 'react-native'
 
 const results = () => {
   return <View>
