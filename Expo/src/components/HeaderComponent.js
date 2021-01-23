@@ -29,13 +29,15 @@ class HeaderComponent extends React.Component {
         text: this.props.title,
         style: {
           color: 'black',
-          fontSize: responsiveScreenWidth(7)
+          fontSize: responsiveScreenWidth(7),
+          backgroundColor: 'white'
         }
       }}
       rightComponent={this.props.rightComponent}
       statusBarProps={{
         backgroundColor: 'transparent',
       }}
+      backgroundColor= {'white'}
     />
   }
 

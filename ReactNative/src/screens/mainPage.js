@@ -4,10 +4,8 @@ import {responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize}
 import HeaderComponent from '../components/HeaderComponent'
 
 import { sha3_512 } from 'js-sha3';
-import {LinearGradient} from 'expo-linear-gradient';
-import * as MediaLibrary from 'expo-media-library';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import {LinearGradient} from 'react-native-linear-gradient';
+import * as ImagePicker from 'react-native-image-picker';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -60,28 +58,8 @@ const mainPage=({navigation}) => {
           //setImage(img);
           var reader = new FileReader();
           reader.readAsDataURL(img);
-          reader.onloadend = function() {
-            var base64data = reader.result;
-            console.log(base64data);
-          }
-          //FileSystem.downloadAsync('',img,'image/png')
-          console.log(img);
-          const fileReaderInstance = new FileReader();
-          fileReaderInstance.readAsDataURL(blob);
-          fileReaderInstance.onload = async () => {
-            let base64data = fileReaderInstance.result;
-            setImage(base64data);
-            console.log(base64data);
-            const data = base64data;
-            const base64Code = data.split("data:image/png;base64,")[1];
-            const filename = FileSystem.documentDirectory + "some_unique_file_name.png";
-            await FileSystem.writeAsStringAsync(filename, base64Code, {
-              encoding: FileSystem.EncodingType.Base64,
-            });
-
-            const mediaResult = await MediaLibrary.saveToLibraryAsync(filename);
             console.log("geldi");
-          }
+
         })
   };
 
