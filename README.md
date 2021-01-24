@@ -20,7 +20,11 @@ YMGK2 Uygulamasının telefon ve bilgisayarlarda çalışmasını sağlayan iste
 
 ### Kurulum
 
-* Herhangi bir kurulum gerektirmez.
+* Gerekli paketleri yüklemek için verilen kod yazılmalı 
+
+```
+npm install
+```
 
 
 * Expo'yu başlatmak için proje klasörü altında şu kod yazılmalı 
