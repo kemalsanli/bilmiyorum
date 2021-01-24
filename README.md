@@ -2,7 +2,7 @@
 
 Kimsenin de bildiğini sanmıyorum. 
 
-YMGK2-DJANGO-API Client uygulaması.
+[YMGK2-DJANGO-API](https://github.com/kemalsanli/YMGK2-DJANGO-API) Client uygulaması.
 
 ## Açıklama
 
