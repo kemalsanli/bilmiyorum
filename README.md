@@ -18,11 +18,6 @@ YMGK2 Uygulamasının telefon ve bilgisayarlarda çalışmasını sağlayan iste
 * Yarn
 * Expo
 
-
-### Kurulum Gereksinimleri
-
-* Expo kullanılabilir durumda olmalıdır.
-
 ### Kurulum
 
 * Herhangi bir kurulum gerektirmez.
